@@ -1,0 +1,28 @@
+; M#L BR= MONV1 M$
+; M#L BR= MONV2 M$
+; M#L BR= MONV3 M$
+; M#L BR= MONV4 M$
+; M#L BR= JAWSV M$
+; M#L BR= JAWSV M$
+; M#L BR= ARV ( ARROW VECTOR )
+; M#L BR= CHRV ( CHAM REV VECT )
+; VLENGTH BR= SCV
+; M#L BR= SFXV
+
+; 5 30 * 4 + C= ARWL
+; ARWL BA= ARWP
+; RAMLEN C= vs1l
+; VARHERE C= vs1s
+; M#L MONSURP + C= M#B
+;
+; ( M#L BR= ARV )
+; V#L BR= PLYRV
+; V#L BR= REVV
+; M#L BR= KEY
+; M#L BR= TRSV
+; V#L BR= HOSV1
+; V#L BR= HOSV2
+; V#L BR= HOSV3
+; RAMLEN C= vs2l
+; VARHERE C= vs2s
+;

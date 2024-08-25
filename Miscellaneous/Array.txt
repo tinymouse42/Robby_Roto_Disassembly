@@ -1,0 +1,65 @@
+;  2 A= g#m : GA# NERDUP g#m ; ( GAME # FOR EACH PLAYER )
+;  2 BA= ma# : MA# NERDUP ma# ; ( MAGICS LEFT FOR EACH PLAYER )
+;  2 BA= rr# : RR# NERDUP rr# ; ( ROTOS LEFT FOR EACH PLAYER )
+;  2 BA= sc* : SC* NERDUP sc* ; ( SCORE MULT FOR EACH PLAYER )
+;  2 BA= tr# : TR# NERDUP tr# ; ( TREASURE POINTER )
+;  2 BA= mh# : MH# NERDUP mh# ; ( MAX HOSTAGES FREED )
+
+; missing BLOCK with ??
+; 0 SC= NODBAS and ...
+; NODX constant 0 for ??
+; NBX constant 4
+; MPL0 constant 8 for ??
+; NDX0 constant 12
+; NDY0 constant 16
+; RVMD constant 20 for ??
+; NODMSK constant 24 for Byte NODe MaSK
+; see bits below :
+; NMDRW bit number 0 in NODMSK for ??
+; NMDRM constant 1 for Mask bit 0 ??
+; NMEXS bit 7 in NODMSK for ??
+;
+; leaves next constant as 25
+; then 2+ for NODSIZ as 27
+; NM-S as ??
+; and NODEMAT as
+
+; { BLOCK 0064 }
+; NC= >TREASURE 1+
+; 1+ C= NODSIZ
+; NODSIZ NNODES * C= NM-S
+; NM-S BA= NODEMAT
+;
+; ( ARROW ARRAY )
+; ( 4 24 * 4 + C= ARWL ARWL BA= ARWP )
+; ( V= Ths )   BV= h-f   ( BV= MAKCON )
+; -->
+;
+; end of { BLOCK 0064 } !! Arrow Array Commented out !!
+
+; { BLOCK 0110 }
+; ( MEMORIZOR OF STUFF )
+; XC? IFTRUE 9 C= NMZS
+;  NMZS NNODES * C= NMS NMS BA= NMZ IFEND
+; 6 C= vNS 5 C= v# vNS v# * C= vAL
+; vAL BA= VM1 XC? IFTRUE vAL BA= VM2
+
+; { BLOCK 0111 }
+;    G 4 ROARRAY )
+; 4 24 * 4 + C= ARWL ARWL BA= ARWP
+; V= Ths BV= h-f BV= MAKCON
+; -->
+;
+; end of { BLOCK 0111 } !! Arrow Array CHANGED below !!
+; note: V= Ths NOT used, BV= h-f DUPLICATE, and BV= MAKCON also NOT used !!
+
+; { BLOCK 0243 }
+; ( MORE VARIABLES )
+; SCON IFTRUE
+; 9 BA= AP1S 9 BA= AP2S IFEND
+; 0 SC= KYSHOW NC= KYOPEN DROP
+
+; 2 BA= f#a : F#A NERDUP f#a ;
+; 20 BA= ?m : ?M NERDUP IF 10 ?m ELSE 0 ?m THEN ;
+; 2 BA= frh : FREDH NERDUP frh ; ( FREED HOS CTR )
+; 2 A= mzp ( ACTIVE MAZE PTR )
