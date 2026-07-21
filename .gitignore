@@ -1,0 +1,18 @@
+# Ignored Folders
+_Work_Area/
+tools/
+reference/
+Versions/
+
+# Compiled ROM binaries, lists, objects, and intermediate output
+*.bin
+*.lst
+*.hex
+*.obj
+*.tmp
+*.bat
+
+# OS generated files
+.DS_Store
+Thumbs.db
+

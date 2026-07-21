@@ -1,0 +1,45 @@
+; Reverse Source of the file "Robby Roto 0000.bin"
+; Public Domain 1999 by designer Jamie Faye Fenton
+;
+; CPU Type: Z80 for BALLY Commercial Arcade Video Game
+;
+; Created with dZ80 2.0 totally from scratch by R.C.D.
+;
+; on Saturday, 24 of August 2013 at 12:53 AM and ...
+; Assembles correctly with ZMAC -i -m ROBBY ROTO.asm
+; on Thursday, 3 of October 2013 by Richard C Degler
+;
+; Revisited on Saturday, 9 of June 2018 by R. C. D.
+; - finihed labeling graphics and animation tables
+; - identified in-game Color and Sound port outputs
+; - commented Self-Test code and most of High Scores.
+
+; Game Play:
+; Make Robby Roto lead the Hostages to the door at the Top of the Screen.
+; Avoid the Spiders, the Teeth and Voltar, who becomes the Troll and digs.
+; They will steal back the Rescuees, but their touch is most deadly to you.
+;
+; All you have is your skill, plus one Magic per Maze to become invisible,
+; but only for 5 to 7 seconds.  Unused Magics can be accumulated for later.
+;
+; Note: the prototype Robby Roto allowed you to tunnel Diagonally, that was
+; deemed too difficult to maneuver so travel is now limited to 4 directions.
+;
+
+; Scoring:
+; No points for picking up the Key, after all you need that to get out...
+;
+; Connect to a Hostage for 100 Points (each and every time that you do!)
+; Save Hostage(s) out the door: One = 200, Two = 250, Three = 300, etc.
+;
+; Treasure values: (Maze - 1) times 200 Points (none in First maze ??)
+; All Rooms Entered bonus: (Maze - 1) times 10 Points per Room on screen.
+; OK, for the First maze a 5 Point bonus each Room if you visit them all.
+;
+; Save Three hostages together and the Points will be Doubled next maze!
+; Do that for Two mazes in a row and the Point values will all be Tripled!!
+;
+; Bonus Roto awarded at the end of the Third maze, and occasionally after.
+;
+; Motto: Robby Roto digs his way into the hearts of game players everywhere.
+;
