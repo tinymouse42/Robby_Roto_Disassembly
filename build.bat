@@ -37,7 +37,7 @@ if not exist "roms" mkdir "roms"
 echo [2/4] Assembling rr_disassembly.asm
 echo       zmac: %ZMAC_BIN%
 pushd src
-"..\%ZMAC_BIN%" -i -h -o zout\rr_disassembly.hex -x zout\rr_disassembly.lst rr_disassembly.asm
+"..\%ZMAC_BIN%" -h -o zout\rr_disassembly.hex -x zout\rr_disassembly.lst rr_disassembly.asm
 set ZMAC_ERR=%ERRORLEVEL%
 popd
 
