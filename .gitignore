@@ -1,18 +1,27 @@
 # Ignored Folders
 _Work_Area/
-tools/
+cfg/
+src/zout/
+roms/
 reference/
-Versions/
 
-# Compiled ROM binaries, lists, objects, and intermediate output
+# Compiled ROM binaries, lists, objects, and scripts
 *.bin
+*.cim
 *.lst
 *.hex
-*.obj
-*.tmp
 *.bat
+*.tmp
+*.py
+*.txt
+*.exe
+*Ω*
 
-# OS generated files
+# System-generated files
 .DS_Store
 Thumbs.db
 
+# Explicit exceptions for required scripts & structure
+!build.bat
+!tools/
+!tools/.gitkeep
