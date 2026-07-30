@@ -47,13 +47,14 @@ Robby_Roto/
 ├── docs/                      # Standards and guidelines
 │   ├── TERSE_Naming_Rules.md  # Naming conventions
 │   └── Z80_Coding_Style.md    # Assembly formatting style guide
-├── roms/                      # Generated ROM binaries (ignored by Git)
+├── roms/
+│   └── sc01a.bin              # Votrax speech (MAME)
 ├── src/
 │   ├── CVGLIB.H               # Commercial Video Game Library Header
 │   ├── rr_disassembly.asm     # Main Z80 source disassembly
 │   └── zout/                  # Intermediate build files (.hex, .lst)
-└── tools/
-    └── .gitkeep               # Directory tracking file
+└── tools/                     # For future use
+    └── .gitkeep               
 ```
 
 ---
