@@ -19,16 +19,15 @@
 ;           when TERSE Forth source code found in ROTO.4th.txt
 ;           Added "CVGLIB.H" and moved Game Play down below END
 ;
-; 20200509: Modifications started by David Turner to clean up comments a bit
-;           to my liking and also to get to compile under Windows. -DET
-;
-; 20230311: Revisiting code for some cleanup and to see if I can get it
-;           to assemble under Windows. So far I have not been successful. -DET
-;
 ; 20240313: This code now compiles and runs correctly with valid checksums. -Det
 ;
-; See the below include file CVGLIB.H for information on TERSE,
-; source code and other information.
+; 20260801: These comments are kept in memory of Richard C. Degler who disassembled
+;           Robby Roto initially. Sadly, he passed away June 28, 2020. He worked for
+;           Bally Midway and primarily worked on the Astrocade home console.
+;           He was very active in the BallyAlley Astrocade group. You can find
+;           the forum at https://groups.io/g/ballyalley and the website
+;           at https://ballyalley.com - Rest in peace my friend.
+;
 ;******************************************************************************************
 
 INCLUDE "CVGLIB.H"
