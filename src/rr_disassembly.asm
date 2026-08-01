@@ -34,118 +34,133 @@
 INCLUDE "CVGLIB.H"
 
 
-        ORG     $0000
+           ORG     $0000
 
 ;******************************************************************************************
-; Entry point of code. This section just jumps over the RST $08
-; location.
+; CPU Reset Entry Point ($0000–$0005)
+; Bypasses the RST $08 vector block and transfers control to cold start.
 ;******************************************************************************************
 
-L0000:  NOP                     ; wait for things to settle down
-        NOP
-        DI                      ; Disable Interrupts
-L0003:  JP      L0027
+L0000:      NOP                             ; Wait for hardware to settle down
+            NOP                             ;
+            DI                              ; Disable interrupts
+L0003:      JP      L0027                   ; Jump to cold start routine
 
-DB      $31,$00		;??? Gorf has nop's here
-
-;******************************************************************************************
-;----> ENTER   Enter TERSE instructions (RST $08)
-;******************************************************************************************
-
-_ENTER  EQU     $CF             ; $CF is the Z80 opcode for RST $08 which jumps here
-
-        DEC     IX              ; save Terse Program Counter for later
-        LD      (IX+$00),B
-        DEC     IX
-        LD      (IX+$00),C
-        POP     BC              ; get new Terse PC from System stack
-        DW	_NEXT
+            DB      $31, $00                ; Padding bytes preceding RST $08 vector
 
 ;******************************************************************************************
-; The RST $38 below are not used. Not sure if they are fillers are used somewhere else ???
+; ----> ENTER (RST $08 Handler) ($0008–$0014)
+; TERSE Forth engine entry point. Saves current TERSE IP (BC) onto the Return Stack (IX),
+; pops the new TERSE IP from the Parameter Stack, and dispatches via _NEXT.
 ;******************************************************************************************
 
-        RST     $38
-        RST     $38
-        RST     $38
+_ENTER      EQU     $CF                     ; Z80 opcode for RST $08
+
+            DEC     IX                      ; Push B onto TERSE Return Stack (IX)
+            LD      (IX+$00), B             ;
+            DEC     IX                      ; Push C onto TERSE Return Stack (IX)
+            LD      (IX+$00), C             ;
+            POP     BC                      ; Pop new TERSE Interpreter Pointer into BC
+            DW      _NEXT                   ; Dispatch next TERSE word
 
 ;******************************************************************************************
-; ----> B@	Return the  8-bit byte q found at byte-address p
+; Unused Restart Vectors ($0015–$0017)
 ;******************************************************************************************
 
-        POP     HL
-        LD      E,(HL)
-        LD      D,$00
-        PUSH    DE
-        DW	_NEXT
-
-        NOP
+            RST     $38                     ; Unused filler vector ($FF)
+            RST     $38                     ; Unused filler vector ($FF)
+            RST     $38                     ; Unused filler vector ($FF)
 
 ;******************************************************************************************
-;----> ???	Get contents of address on stack and push it on stack
+; ----> B@ (RST $18 Handler) ($0018–$001E)
+; TERSE Forth Byte-Fetch: Pops address off Parameter Stack, fetches 8-bit byte,
+; zero-extends to 16 bits, pushes result back onto stack, and dispatches.
 ;******************************************************************************************
 
-        POP     HL              ; RST $20 jumps here
-        LD      E,(HL)
-        INC     HL
-        LD      D,(HL)
-        PUSH    DE
-        DW	_NEXT
+            POP     HL                      ; Pop target memory address into HL
+            LD      E, (HL)                 ; Read byte at (HL) into low byte E
+            LD      D, $00                  ; Zero-extend high byte D
+            PUSH    DE                      ; Push 16-bit result onto stack
+            DW      _NEXT                   ; Dispatch next TERSE word
+
+            NOP                             ; Padding byte before $0020 vector
 
 ;******************************************************************************************
-; Start Robby Roto here
+; ----> @ / W@ (RST $20 Handler) ($0020–$0026)
+; TERSE Forth Word-Fetch: Pops address off Parameter Stack, fetches 16-bit word,
+; pushes word onto stack, and dispatches.
 ;******************************************************************************************
 
-L0027:  NOP
+            POP     HL                      ; Pop target memory address into HL
+            LD      E, (HL)                 ; Read low byte
+            INC     HL                      ;
+            LD      D, (HL)                 ; Read high byte
+            PUSH    DE                      ; Push 16-bit word onto stack
+            DW      _NEXT                   ; Dispatch next TERSE word
 
 ;******************************************************************************************
-; RST $28 restart handler does "re-start Robby Roto here"
+; Cold Start Entry Point ($0027)
+; Targeted by reset jump at $0003
 ;******************************************************************************************
 
-        NOP                     ; RST $28 jumps here
-
-        XOR     A
-        LD      C,$18           ; clear first 24 outports (0 to 23)
-L002C:  DEC     C
-        OUT     (C),A
-        JR      NZ,L002C
-
-        INC     A
-        OUT     (CONCM),A       ; set Commercial Mode for HiRes
-
-        LD      HL,$FEFF        ; point to Top of Memory Map minus $0100 (for COCKTAIL mode)
-
-L0037:  LD      (HL),A          ; Try writing to top location to make sure it is there perhaps?
-        CP      (HL)            ; Was it a successful write?
-        JR      NZ,L0037        ; ... No then loop forever
-
-        LD      (HL),$00        ; $00 to fill memory
-        LD      B,$00           ; 256 passes
-
-L003F:  LD      IX,$FF80        ; Do these two commands 256 times. Not of sure the reason.
-        LD      SP,$0000
-        DJNZ    L003F
+L0027:      NOP                             ; Cold start entry point
 
 ;******************************************************************************************
-; Turn off all lamps  (does it do anything else ??? )
+; Cold Start & Outport Initialization ($0028–$0030)
+; RST $28 vector entry point. Clears the first 24 hardware outports ($00–$17).
 ;******************************************************************************************
 
-        LD      A,$08           ; Clearing "Special" CONTROL Input $15 Latches 0 through 7
-        LD      BC,$0015        ; "read" SW5 with B = 0 thru 14 step 2
-L004D:  IN      L,(C)
-        INC     B
-        INC     B
-        DEC     A
-        JR      NZ,L004D
+L0028:      NOP                             ; Cold start / RST $28 entry point
+            XOR     A                       ; Clear accumulator (A = 0)
+            LD      C, $18                  ; Set counter for 24 outports ($00–$17)
+L002C:      DEC     C                       ; Decrement port index
+            OUT     (C), A                  ; Output $00 to port (C)
+            JR      NZ, L002C               ; Loop until ports $17 down to $00 are cleared
 
 ;******************************************************************************************
-; See if service switch is on
+; Commercial Mode & Top System RAM Test ($0031–$003E)
 ;******************************************************************************************
 
-        IN      A,(SW0)         ; Control Port
-        BIT     SERVICE,A       ; Active Low for Service mode
-        JR      Z,L006B         ; ... Yes, jump to service mode routines
-        JP      L00A2           ; else continue normal game setup
+            INC     A                       ; A = 1
+            OUT     (CONCM), A              ; Enable Commercial Mode (Port $08)
+
+            LD      HL, $FEFF               ; Point to RAM test address ($FEFF)
+L0037:      LD      (HL), A                 ; Test write to RAM location
+            CP      (HL)                    ; Verify write succeeded
+            JR      NZ, L0037               ; Loop if write/read fails
+
+            LD      (HL), $00               ; Clear test RAM location
+            LD      B, $00                  ; Initialize 256-pass counter
+
+;******************************************************************************************
+; RAM Clear Loop Setup ($003F–$0047)
+;******************************************************************************************
+
+L003F:      LD      IX, $FF80               ; Set IX register pointer
+            LD      SP, $0000               ; Set Stack Pointer
+            DJNZ    L003F                   ; Loop 256 times
+
+;******************************************************************************************
+; Turn Off Special Control Input $15 Latches ($0048–$0053)
+; Clears "Special" CONTROL Input $15 Latches 0 through 7
+;******************************************************************************************
+
+            LD      A, $08                  ; Set loop counter for 8 latches
+            LD      BC, $0015               ; Point B = 0, C = Port $15 (SW5)
+L004D:      IN      L, (C)                  ; Read input port
+            INC     B                       ; Advance latch index
+            INC     B                       ;
+            DEC     A                       ; Decrement loop counter
+            JR      NZ, L004D               ; Loop until all 8 latches processed
+
+;******************************************************************************************
+; Service Switch Verification ($0054–$005C)
+;******************************************************************************************
+
+            IN      A, (SW0)                ; Read Control Port SW0
+            BIT     SERVICE, A              ; Test Service Mode bit (active low)
+            JR      Z, L006B                ; If Service switch is ON, jump to test mode
+            JP      L00A2                   ; Else jump to normal game setup
 
 ;******************************************************************************************
 ; If bad checksum for X1 ROM Strobe white stripes and lock game
