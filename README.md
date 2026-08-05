@@ -8,6 +8,7 @@ This repository contains the disassembly, source code reconstruction, and techni
 
 * **Assembler:** zmac v1.3 (Z80 Macro Cross Assembler)
   * [Windows Binary (`zmac.exe`)](https://ballyalley.com/ml/ml_tools/Zmac13_win32.zip)
+  * [Linux Source and Binary (`zmac`)](https://ballyalley.com/ml/ml_tools/zmac-linux.zip)
 * **Primary Source:** `src/rr_disassembly.asm`
 
 ---
@@ -35,6 +36,31 @@ set ZMAC=C:\path\to\zmac.exe
 build.bat
 ```
 
+---
+
+--- 
+### Building the ROMs ---> Linux
+
+The Linux build requires Bash, `zip`, and a Linux build of `zmac`. The build script searches for `zmac` in the following order:
+
+1. The executable named by the `ZMAC` environment variable.
+2. `tools/zmac` in the repository.
+3. `zmac` in `PATH`.
+
+From the repository root, make the script executable once and run it:
+
+```bash
+chmod +x build.sh
+./build.sh
+```
+
+To select a specific assembler executable:
+
+```bash
+ZMAC=/path/to/zmac ./build.sh
+```
+
+The script will automatically compile the assembly and deposit the final, ready-to-play binaries (`rotox1.bin` through `rotox10.bin`) and the packaged robby.zip into the `roms/` folder in your project root.
 ---
 
 ## Repository Structure
