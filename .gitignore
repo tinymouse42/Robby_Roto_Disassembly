@@ -12,6 +12,7 @@ src/zout/
 *.txt
 *.exe
 *.zip
+*.cfg
 
 # Personal scratch files reserved for the repository maintainer
 *Ω*
